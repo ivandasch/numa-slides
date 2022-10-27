@@ -1,0 +1,79 @@
+@font-face {
+    font-family: "TTTravels-DemiBold";
+    src: url("fonts/TTTravels-DemiBold.ttf");
+}
+
+@font-face {
+    font-family: "TTTravels-Regular";
+    src: url("fonts/TTTravels-Regular.ttf");
+}
+
+.reveal {
+    font-family: TTTravels-Regular, serif;
+    font-size: 25px!important;
+}
+
+.reveal h1 {
+    font-size: 1.5em!important;
+}
+
+.reveal h2 {
+    font-size: 1.5em!important;
+}
+
+.reveal h3 {
+    font-size: 1.5em!important;
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+    font-family: TTTravels-DemiBold, serif;
+}
+.reveal pre code {
+    max-height: 600px;
+    display: block;
+    padding: 5px;
+    overflow: auto;
+    word-wrap: normal;
+    font-size: 1.2em!important;
+    line-height: 1.2em!important;
+}
+
+.reveal section.title small {
+    font-family: TTTravels-DemiBold, serif;
+    font-weight: bold;
+    font-size: 1em!important;
+}
+
+.reveal section.title h1 {
+    font-weight: bold;
+}
+
+
+.reveal .slide-number {
+    left: 8px !important;
+    color: black!important;
+    font-size: 1.5em!important;
+    background-color: transparent !important;
+}
+
+.reveal section img {
+    border: 0;
+    box-shadow: none;
+}
+
+span.icon.red {
+    color: red;
+}
+
+span.icon.green {
+    color: green;
+}
+
+span.icon.deepskyblue {
+    color: deepskyblue;
+}
+
+.math {
+    color: #333;
+    background: #f8f8f8
+}

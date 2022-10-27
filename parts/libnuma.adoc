@@ -1,0 +1,88 @@
+== NUMA. Cистемные вызовы
+=== NUMA. Системные вызовы
+Напрямую в *glibc* не реализовано, необходимо использовать *libnuma*
+
+=== NUMA. Системные вызовы
+*MBIND* -- задание memory policy для аллоцированной памяти
+[source, C]
+----
+void *numa_alloc_interleaved(size_t size, struct bitmask* bmp)
+{
+    char *mem;
+
+    mem = mmap(0, size, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+    if (mem == (char *)-1)
+        return NULL;
+
+    if (mbind(mem, size, MPOL_INTERLEAVE, bmp ? bmp->maskkp : NULL, bmp ? bmp->size + 1 : 0, 0) < 0))
+        return NULL;
+
+    return mem;
+}
+
+void numa_free(void *mem, size_t size)
+{
+    munmap(mem, size);
+}
+----
+
+=== NUMA. API libnuma
+[source, C]
+----
+/** Аллокация */
+void *numa_alloc_interleaved_subset(size_t size, struct bitmask *nodemask);
+void *numa_alloc_interleaved(size_t size);
+void *numa_alloc_onnode(size_t size, int node);
+void *numa_alloc_local(size_t size);
+void *numa_alloc(size_t size);
+
+/** Работа с маской узлов */
+int numa_max_node();
+struct bitmask *numa_bitmask_alloc(unsigned int n);
+void numa_bitmask_free(struct bitmask *bmp);
+struct bitmask *numa_bitmask_setbit(struct bitmask *bmp, unsigned int n);
+int numa_bitmask_isbitset(const struct bitmask *bmp, unsigned int n);
+----
+
+=== NUMA. Пример использования
+[source, C++]
+----
+union region_size {
+    size_t size;
+    max_align_t a;
+};
+
+template<typename Func, typename ...Args>
+inline void *NumaAllocHelper(Func f, size_t size, Args ...args) {
+    auto ptr = static_cast<region_size *>(f(size + sizeof(region_size), args...));
+    if (ptr) {
+        ptr->size = size;
+        ptr++;
+    }
+    return ptr;
+}
+
+inline region_size* ConvertPointer(void* buf) {
+    if (buf) {
+        auto *ptr = static_cast<region_size *>(buf);
+        ptr--;
+        return ptr;
+    }
+    return nullptr;
+}
+----
+
+=== NUMA. Пример использования
+[source, C++]
+----
+void *AllocInterleaved(size_t size, const BitSet &node_set) {
+    return NumaAllocHelper(numa_alloc_interleaved_subset, size, node_set.p_impl_->Raw());
+}
+
+void Free(void *buf) {
+    auto ptr = ConvertPointer(buf);
+    if (ptr) {
+        numa_free(ptr, ptr->size + sizeof(region_size));
+    }
+}
+----

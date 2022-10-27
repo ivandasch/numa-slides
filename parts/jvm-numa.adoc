@@ -1,0 +1,22 @@
+== NUMA и GC
+=== NUMA и GC. Включение
+* `+XX:UseNUMA`
+* Работает на всех более-менее адекватных JVM (в том числе 8)
+* Аллоцирует кучу в режиме чередования, и это дает прирост производительности, но...
+
+=== NUMA и GC. Включение
+Не NUMA-aware....
+
+=== NUMA и GC. NUMA-aware
+* ZGC (с 11 версии)
+* G1 (c 14 версии, бекпорта на 11 для openjdk нет)
+
+=== NUMA и GC. NUMA-aware. Инициализация
+image::NUMA_heap_init.png[width=85%, height=85%]
+
+=== NUMA и GC. NUMA-aware. Страницы и регионы
+image::NUMA_region_page.png[width=85%, height=85%]
+
+=== NUMA и GC. NUMA-aware. Surviving
+image::NUMA_survivor_region.png[width=85%, height=85%]
+

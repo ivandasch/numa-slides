@@ -1,0 +1,130 @@
+== NUMA и Apache Ignite
+
+=== NUMA и Apache Ignite. Требования
+* Linux (достаточно свежий, amd64)
+* libnuma 2.0.x
+* Apache Ignite 2.14
+
+=== NUMA и Apache Ignite. Установка
+[source, bash]
+----
+$ sudo yum install numactl
+$ sudo apt-get install numactl
+$ mv libs/optional/numa-allocator libs
+----
+
+=== NUMA и Apache Ignite. SimpleNumaAllocationStrategy
+Аллокация с политикой по-умолчанию, `void* numa_alloc(size_t)`
+[source, xml]
+----
+<property name="dataStorageConfiguration">
+    <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+        <property name="defaultDataRegionConfiguration">
+            <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                <property name="memoryAllocator">
+                    <bean class="org.apache.ignite.mem.NumaAllocator">
+                        <constructor-arg>
+                            <bean class="org.apache.ignite.mem.SimpleNumaAllocationStrategy"/>
+                        </constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</property>
+----
+
+=== NUMA и Apache Ignite. SimpleNumaAllocationStrategy
+Аллокация на выбранном NUMA-узле, `void* numa_alloc_onnode(size_t, int)`
+[source, xml]
+----
+<property name="dataStorageConfiguration">
+    <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+        <property name="defaultDataRegionConfiguration">
+            <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                <property name="memoryAllocator">
+                    <bean class="org.apache.ignite.mem.NumaAllocator">
+                        <constructor-arg>
+                            <bean class="org.apache.ignite.mem.SimpleNumaAllocationStrategy">
+                                <constructor-arg name="node" value="0"/>
+                            </bean>
+                        </constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</property>
+----
+
+=== NUMA и Apache Ignite. LocalNumaAllocationStrategy
+Аллокация на локальном NUMA-узле, `void* numa_alloc_onnode(size_t)`
+[source, xml]
+----
+<property name="dataStorageConfiguration">
+    <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+        <property name="defaultDataRegionConfiguration">
+            <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                <property name="memoryAllocator">
+                    <bean class="org.apache.ignite.mem.NumaAllocator">
+                        <constructor-arg>
+                            <constructor-arg>
+                                <bean class="org.apache.ignite.mem.LocalNumaAllocationStrategy"/>
+                            </constructor-arg>
+                        </constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</property>
+----
+
+=== NUMA и Apache Ignite. InterleavedNumaAllocationStrategy
+Аллокация с чередованием по NUMA-узлам, `void* numa_alloc_interleaved(size_t)`
+[source, xml]
+----
+<property name="dataStorageConfiguration">
+    <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+        <property name="defaultDataRegionConfiguration">
+            <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                <property name="memoryAllocator">
+                    <bean class="org.apache.ignite.mem.NumaAllocator">
+                        <constructor-arg>
+                            <bean class="org.apache.ignite.mem.InterleavedNumaAllocationStrategy"/>
+                        </constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</property>
+----
+
+=== NUMA и Apache Ignite. InterleavedNumaAllocationStrategy
+Аллокация с чередованием по выбранным NUMA-узлам, pass:q[<br>] `void* numa_alloc_interleaved_subset(size_t, struct bitmask*)`
+[source, xml]
+-----
+<property name="dataStorageConfiguration">
+    <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+        <property name="defaultDataRegionConfiguration">
+            <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                <property name="memoryAllocator">
+                    <bean class="org.apache.ignite.mem.NumaAllocator">
+                        <constructor-arg>
+                            <bean class="org.apache.ignite.mem.InterleavedNumaAllocationStrategy">
+                                <constructor-arg name="nodes">
+                                    <array>
+                                        <value>0</value>
+                                        <value>1</value>
+                                    </array>
+                                </constructor-arg>
+                            </bean>
+                        </constructor-arg>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+</property>
+-----

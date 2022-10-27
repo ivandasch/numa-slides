@@ -1,0 +1,60 @@
+:imagesdir: images
+:stem: latexmath
+:revealjs_theme: simple
+:customcss: style.css
+:icons: font
+:iconfont-remote!:
+:iconfont-name: font-awesome-4.7.0/css/font-awesome
+:source-highlighter: highlightjs
+:highlightjs-theme:  hljs/idea.css
+:revealjs_width: 1400
+:revealjs_height: 800
+:revealjs_slideNumber: c
+:author: Дащинский Иван
+
+= Apache Ignite и NUMA
+
+[%notitle]
+== About me
+
+[cols="30a,70a", grid=none, frame=none]
+|===
+.^|image::me.jpg[]
+.^|
+* PMC проекта Apache Ignite
+* ivandasch@apache.org
+* icon:github[] https://github.com/ivandasch[ivandasch]
+* icon:telegram[role=deepskyblue] https://t.me/ivandasch[ivandasch]
+|===
+
+== Введение
+=== Введение. UMA
+image::uma.png[]
+
+=== Введение. NUMA
+image::numa.png[]
+
+include::parts/libnuma.adoc[]
+include::parts/jvm-numa.adoc[]
+include::parts/ignite-numa.adoc[]
+
+[.columns]
+== Ссылки
+[.column]
+--
+image::qr-gh-link.svg[width=50%, height=50%]
+https://github.com/apache/ignite/blob/master/modules/numa-allocator/README.md[Документация по NUMA аллокатору]
+--
+[.column]
+--
+image::qr-code-jdk.svg[width=50%, height=50%]
+https://sangheon.github.io/2020/11/03/g1-numa.html[Статья про NUMA-aware G1GC]
+--
+[.column]
+--
+image::qr-code-linux-man.svg[width=50%, height=50%]
+https://man7.org/linux/man-pages/man7/numa.7.html[Linux документация по NUMA]
+--
+
+
+
