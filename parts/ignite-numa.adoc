@@ -3,7 +3,7 @@
 === NUMA и Apache Ignite. Требования
 * Linux (достаточно свежий, amd64)
 * libnuma 2.0.x
-* Apache Ignite 2.14
+* Apache Ignite 2.13
 
 === NUMA и Apache Ignite. Установка
 [source, bash]
